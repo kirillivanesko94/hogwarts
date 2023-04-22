@@ -3,7 +3,6 @@ package ru.hogwarts.school1;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mockito;
 import ru.hogwarts.school1.model.Student;
 import ru.hogwarts.school1.repositories.StudentRepository;
 import ru.hogwarts.school1.service.StudentService;
@@ -13,7 +12,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 public class StudentServiceTest {
@@ -67,9 +67,8 @@ public class StudentServiceTest {
         verify(studentRepository, times(1)).save(harry);
     }
 
-    @ParameterizedTest
-    @ValueSource(longs = 0L)
-    void checkDeleteStudent(Long id) {
+    @Test
+    void checkDeleteStudent() {
         studentService.deleteStudent(harry.getId());
         verify(studentRepository).deleteById(harry.getId());
     }
