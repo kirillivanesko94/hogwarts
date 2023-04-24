@@ -100,4 +100,20 @@ public class StudentServiceTest {
         assertEquals(expected, actual);
 
     }
+
+    @Test
+    void checkFindStudentsInARangeOfAges() {
+        int min = 0;
+        int max = 20;
+        when(studentRepository.findByAgeBetween(min, max)).thenReturn(List.of(harry, hermiona, ron));
+
+        Collection<Student> expected = new ArrayList<>();
+        expected.add(harry);
+        expected.add(hermiona);
+        expected.add(ron);
+
+        Collection<Student> actual = studentService.findStudentsInARangeOfAges(min, max);
+
+        assertEquals(expected, actual);
+    }
 }
