@@ -88,7 +88,7 @@ public class FacultyServiceTest {
 
     @ParameterizedTest
     @ValueSource(strings = "Red")
-    void checkFindByAge(String color) {
+    void checkFindByColor(String color) {
         when(repository.findByColor(color)).thenReturn(List.of(gryffindor));
 
         Collection<Faculty> expected = new ArrayList<>();
@@ -98,6 +98,33 @@ public class FacultyServiceTest {
         Collection<Faculty> actual = facultyService.findByColor(color);
 
         assertEquals(expected, actual);
+        verify(repository, times(1)).findByColor(color);
 
+    }
+
+    @Test
+    void checkFindByNameOrColor() {
+        String name = "Gryffindor";
+        String color = "Red";
+        when(repository.findByNameOrColorIgnoreCase(name, color)).thenReturn(List.of(gryffindor));
+
+        Collection<Faculty> expected = new ArrayList<>();
+        expected.add(gryffindor);
+
+
+        Collection<Faculty> actual = facultyService.findByNameOrColor(name, color);
+
+        assertEquals(expected, actual);
+        verify(repository, times(1)).findByNameOrColorIgnoreCase(name, color);
+
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = 6)
+    void checkFindFacultyByStudent(Long id) {
+        when(repository.findFacultyByStudentId(id)).thenReturn(gryffindor);
+        Faculty result = facultyService.findFacultyByStudent(id);
+        assertEquals(gryffindor, result);
+        verify(repository, times(1)).findFacultyByStudentId(id);
     }
 }

@@ -4,6 +4,6 @@ select name from student;
 select * from student where name like '%o%';
 select * from student where age < id;
 select * from student ORDER BY age;
-select * from student, faculty
-where student.faculty_id = faculty.id
-  and faculty.id = 6;
+select s.* from student as s, faculty as f
+where s.faculty_id = f.id
+  and f.id = 6;

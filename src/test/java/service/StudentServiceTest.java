@@ -116,4 +116,19 @@ public class StudentServiceTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    void checkFindStudentsByFaculty() {
+        Long id = 6L;
+        when(studentRepository.findStudentsByFacultyId(id)).thenReturn(List.of(harry, hermiona, ron));
+
+        Collection<Student> expected = new ArrayList<>();
+        expected.add(harry);
+        expected.add(hermiona);
+        expected.add(ron);
+
+        Collection<Student> actual = studentService.findStudentsByFaculty(id);
+
+        assertEquals(expected, actual);
+    }
 }
