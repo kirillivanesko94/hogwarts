@@ -70,4 +70,8 @@ public class Faculty {
     public void setColor(String color) {
         this.color = color;
     }
+
+    public Collection<Student> getStudent() {
+        return student;
+    }
 }
