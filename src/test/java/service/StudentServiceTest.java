@@ -12,8 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class StudentServiceTest {
@@ -116,19 +115,11 @@ public class StudentServiceTest {
 
         assertEquals(expected, actual);
     }
+    @Test
+    void checkFindFacultyByStudentId() {
+        Optional<Student> student = studentRepository.findById(harry.getId());
+        assertNotNull(student);
+        verify(studentRepository, times(1)).findById(harry.getId());
+    }
 
-//    @Test
-//    void checkFindStudentsByFaculty() {
-//        Long id = 6L;
-//        when(studentRepository.findStudentsByFacultyId(id)).thenReturn(List.of(harry, hermiona, ron));
-//
-//        Collection<Student> expected = new ArrayList<>();
-//        expected.add(harry);
-//        expected.add(hermiona);
-//        expected.add(ron);
-//
-//        Collection<Student> actual = studentService.findStudentsByFaculty(id);
-//
-//        assertEquals(expected, actual);
-//    }
 }

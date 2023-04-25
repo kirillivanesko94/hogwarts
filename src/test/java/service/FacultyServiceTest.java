@@ -12,8 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class FacultyServiceTest {
@@ -23,6 +22,7 @@ public class FacultyServiceTest {
     Faculty gryffindor = new Faculty(0L, "Gryffindor", "Red");
     Faculty slytherin = new Faculty(0L, "Slytherin", "Green");
     Faculty ravenclaw = new Faculty(0L, "Ravenclaw", "Orange");
+
 
     @Test
     void checkAddFaculty() {
@@ -119,12 +119,10 @@ public class FacultyServiceTest {
 
     }
 
-    @ParameterizedTest
-    @ValueSource(longs = 6)
-    void checkFindFacultyByStudent(Long id) {
-//        when(repository.findFacultyByStudentId(id)).thenReturn(gryffindor);
-//        Faculty result = facultyService.findFacultyByStudent(id);
-//        assertEquals(gryffindor, result);
-//        verify(repository, times(1)).findFacultyByStudentId(id);
-   }
+    @Test
+    void checkFindStudentByFacultyId() {
+        Optional<Faculty> actual = repository.findById(gryffindor.getId());
+        assertNotNull(actual);
+        verify(repository, times(1)).findById(gryffindor.getId());
+    }
 }

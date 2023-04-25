@@ -40,7 +40,7 @@ public class FacultyController {
     @GetMapping("students")
     public ResponseEntity <Collection<Student>> findStudentsByFaculty(@RequestParam Long id) {
         if(id != null) {
-            return ResponseEntity.ok(facultyService.findStudentByFacultyId(id));
+            return ResponseEntity.ok(facultyService.findStudentsByFacultyId(id));
         }
         return ResponseEntity.badRequest().build();
     }

@@ -44,7 +44,7 @@ public class FacultyService {
     public Collection<Faculty> findByNameOrColor(String name, String color){
         return facultyRepository.findByNameOrColorIgnoreCase(name, color);
     }
-    public Collection<Student> findStudentByFacultyId(Long id) {
+    public Collection<Student> findStudentsByFacultyId(Long id) {
         Optional<Faculty> faculty = facultyRepository.findById(id);
         if (faculty.isPresent()) {
             return faculty.get().getStudent();
