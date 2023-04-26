@@ -12,8 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class FacultyServiceTest {
@@ -23,6 +22,7 @@ public class FacultyServiceTest {
     Faculty gryffindor = new Faculty(0L, "Gryffindor", "Red");
     Faculty slytherin = new Faculty(0L, "Slytherin", "Green");
     Faculty ravenclaw = new Faculty(0L, "Ravenclaw", "Orange");
+
 
     @Test
     void checkAddFaculty() {
@@ -88,7 +88,7 @@ public class FacultyServiceTest {
 
     @ParameterizedTest
     @ValueSource(strings = "Red")
-    void checkFindByAge(String color) {
+    void checkFindByColor(String color) {
         when(repository.findByColor(color)).thenReturn(List.of(gryffindor));
 
         Collection<Faculty> expected = new ArrayList<>();
@@ -98,6 +98,31 @@ public class FacultyServiceTest {
         Collection<Faculty> actual = facultyService.findByColor(color);
 
         assertEquals(expected, actual);
+        verify(repository, times(1)).findByColor(color);
 
+    }
+
+    @Test
+    void checkFindByNameOrColor() {
+        String name = "Gryffindor";
+        String color = "Red";
+        when(repository.findByNameOrColorIgnoreCase(name, color)).thenReturn(List.of(gryffindor));
+
+        Collection<Faculty> expected = new ArrayList<>();
+        expected.add(gryffindor);
+
+
+        Collection<Faculty> actual = facultyService.findByNameOrColor(name, color);
+
+        assertEquals(expected, actual);
+        verify(repository, times(1)).findByNameOrColorIgnoreCase(name, color);
+
+    }
+
+    @Test
+    void checkFindStudentByFacultyId() {
+        Optional<Faculty> actual = repository.findById(gryffindor.getId());
+        assertNotNull(actual);
+        verify(repository, times(1)).findById(gryffindor.getId());
     }
 }
