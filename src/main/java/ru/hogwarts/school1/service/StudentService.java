@@ -46,10 +46,7 @@ public class StudentService {
 
     public Faculty findFacultyByStudentId(Long id) {
         Optional<Student> student = studentRepository.findById(id);
-        if (student.isPresent()) {
-            return student.get().getFaculty();
-        }
-        else return null;
+        return student.map(Student::getFaculty).orElse(null);
     }
 }
 
