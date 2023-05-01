@@ -21,8 +21,7 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(StudentController.class)
 public class StudentControllerTest {
@@ -100,6 +99,47 @@ public class StudentControllerTest {
         verify(studentRepository,times(1)).findById(any(Long.class));
 
     }
+    @Test
+    public void testGetCountAllStudent() throws Exception {
+        long expectedCount = 10L;
+        when(studentRepository.count()).thenReturn(expectedCount);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/count-all-student")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(expectedCount));
+
+        verify(studentRepository, times(1)).count();
+    }
+    @Test
+    public void testGetAverageAgeAllStudents() throws Exception {
+        Float expectedCount = 11f;
+        when(studentRepository.getAverageAge()).thenReturn(expectedCount);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/average-age")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(expectedCount));
+
+        verify(studentRepository, times(1)).getAverageAge();
+    }
+    @Test
+    public void testFindFiveLastStudent() throws Exception {
+
+        when(studentRepository.findFiveLastStudent()).thenReturn(List.of(harry));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/five-last")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(harry.getId()))
+                .andExpect(jsonPath("$[0].name").value(harry.getName()))
+                .andExpect(jsonPath("$[0].age").value(harry.getAge()));
+        verify(studentRepository, times(1)).findFiveLastStudent();
+    }
+
     @Test
     void testCreateStudent() throws Exception {
         JSONObject studentObject = new JSONObject();

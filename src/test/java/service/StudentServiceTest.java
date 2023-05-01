@@ -115,11 +115,46 @@ public class StudentServiceTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void checkFindFacultyByStudentId() {
         Optional<Student> student = studentRepository.findById(harry.getId());
         assertNotNull(student);
         verify(studentRepository, times(1)).findById(harry.getId());
+    }
+
+    @Test
+    void checkGetCountAllStudent() {
+        Long expected = 3L;
+        when(studentRepository.count()).thenReturn(expected);
+
+        Long actual = studentService.getCountAllStudent();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void checkGetAverageAgeAllStudent() {
+        Float expected = 11.33f;
+        when(studentRepository.getAverageAge()).thenReturn(expected);
+
+        Float actual = studentService.getAverageAgeAllStudent();
+
+        assertEquals(expected, actual);
+        verify(studentRepository).getAverageAge();
+    }
+
+    @Test
+    void checkFindFiveLastStudent() {
+        List<Student> expected = new ArrayList<>();
+        expected.add(hermiona);
+        expected.add(harry);
+        expected.add(ron);
+        when(studentRepository.findFiveLastStudent()).thenReturn(expected);
+
+        List<Student> actual = studentService.findFiveLastStudent();
+
+        assertEquals(expected, actual);
     }
 
 }
