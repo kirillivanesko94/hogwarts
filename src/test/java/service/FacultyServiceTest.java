@@ -125,4 +125,14 @@ public class FacultyServiceTest {
         assertNotNull(actual);
         verify(repository, times(1)).findById(gryffindor.getId());
     }
+    @Test
+    void checkGetLongestFacultyName() {
+        when(repository.findAll()).thenReturn(List.of(gryffindor));
+
+        String expected = gryffindor.getName();
+        String actual = facultyService.getLongestFacultyName();
+
+        assertEquals(expected, actual);
+        verify(repository, times(1)).findAll();
+    }
 }

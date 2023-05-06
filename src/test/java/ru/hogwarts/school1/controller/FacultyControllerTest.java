@@ -21,8 +21,7 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(FacultyController.class)
 public class FacultyControllerTest {
@@ -84,6 +83,18 @@ public class FacultyControllerTest {
 
         verify(facultyRepository, times(1)).findById(any(Long.class));
     }
+    @Test
+    void testGetLongestFacultyName() throws Exception {
+        when(facultyRepository.findAll()).thenReturn(List.of(faculty));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/faculty/longest-faculty")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(faculty.getName()));
+
+        verify(facultyRepository, times(1)).findAll();
+    }
 
     @Test
     void checkCreateFaculty() throws Exception {
@@ -138,5 +149,4 @@ public class FacultyControllerTest {
 
         verify(facultyRepository, times(1)).deleteById(faculty.getId());
     }
-
 }

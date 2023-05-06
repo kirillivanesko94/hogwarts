@@ -9,6 +9,7 @@ import ru.hogwarts.school1.repositories.FacultyRepository;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Optional;
 
 @Service
@@ -18,6 +19,7 @@ public class FacultyService {
     public FacultyService(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;
     }
+
     Logger logger = LoggerFactory.getLogger(FacultyService.class);
 
     public Faculty addFaculty(Faculty faculty) {
@@ -50,10 +52,11 @@ public class FacultyService {
         return facultyRepository.findAll();
     }
 
-    public Collection<Faculty> findByNameOrColor(String name, String color){
+    public Collection<Faculty> findByNameOrColor(String name, String color) {
         logger.info("Was invoked method to find all faculties by the following name - {} or color - {}", name, color);
         return facultyRepository.findByNameOrColorIgnoreCase(name, color);
     }
+
     public Collection<Student> findStudentsByFacultyId(Long id) {
         logger.info("Was invoked method to find all students by the following faculty id - {}", id);
         Optional<Faculty> faculty = facultyRepository.findById(id);
@@ -62,5 +65,13 @@ public class FacultyService {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    public String getLongestFacultyName() {
+        return getAllFaculty()
+                .parallelStream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length))
+                .orElse(null);
     }
 }

@@ -7,6 +7,7 @@ import ru.hogwarts.school1.model.Student;
 import ru.hogwarts.school1.service.FacultyService;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("faculty")
@@ -37,12 +38,22 @@ public class FacultyController {
         }
         return ResponseEntity.ok(facultyService.getAllFaculty());
     }
+
     @GetMapping("students")
-    public ResponseEntity <Collection<Student>> findStudentsByFaculty(@RequestParam Long id) {
-        if(id != null) {
+    public ResponseEntity<Collection<Student>> findStudentsByFaculty(@RequestParam Long id) {
+        if (id != null) {
             return ResponseEntity.ok(facultyService.findStudentsByFacultyId(id));
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("longest-faculty")
+    public ResponseEntity<String> getLongestFacultyName() {
+        return ResponseEntity.ok(facultyService.getLongestFacultyName());
+    }
+    @GetMapping("sum")
+    public int getSum() {
+        return Stream.iterate(1, a -> a +1) .limit(1_000_000).parallel().reduce(0, (a, b) -> a + b );
     }
 
     @PostMapping
@@ -62,7 +73,6 @@ public class FacultyController {
     @DeleteMapping("{id}")
     public ResponseEntity<Faculty> deleteFaculty(@PathVariable Long id) {
         facultyService.deleteFaculty(id);
-
         return ResponseEntity.ok().build();
     }
 }

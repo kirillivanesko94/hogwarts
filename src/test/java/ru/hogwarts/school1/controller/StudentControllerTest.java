@@ -139,6 +139,31 @@ public class StudentControllerTest {
                 .andExpect(jsonPath("$[0].age").value(harry.getAge()));
         verify(studentRepository, times(1)).findFiveLastStudent();
     }
+    @Test
+    void testGetStudentsNameStartingWithA() throws Exception {
+        Student student = new Student(14L, "Афанасий", 20);
+        when(studentRepository.findAll()).thenReturn(List.of(student));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/starts-with-a")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(student.getId()))
+                .andExpect(jsonPath("$[0].name").value(student.getName()))
+                .andExpect(jsonPath("$[0].age").value(student.getAge()));
+
+        verify(studentRepository, times(1)).findAll();
+    }
+    @Test
+    void testGetAvgAgeAllStudents() throws Exception {
+        when(studentRepository.findAll()).thenReturn(List.of(harry));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/avg"))
+                .andExpect(status().isOk());
+
+        verify(studentRepository, times(1)).findAll();
+    }
 
     @Test
     void testCreateStudent() throws Exception {
@@ -194,4 +219,5 @@ public class StudentControllerTest {
 
         verify(studentRepository, times(1)).deleteById(harry.getId());
     }
+
 }
