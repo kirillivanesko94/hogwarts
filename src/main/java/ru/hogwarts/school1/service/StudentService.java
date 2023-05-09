@@ -107,7 +107,8 @@ public class StudentService {
 //                .limit(2)
 //                .forEach(System.out::println));
 
-        List<Student> students = studentRepository.findAll();
+        List<Student> students;
+        students = studentRepository.findAll();
 
         System.out.println(students.get(0).getName());
         System.out.println(students.get(1).getName());
