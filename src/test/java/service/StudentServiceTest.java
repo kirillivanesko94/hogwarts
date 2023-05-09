@@ -157,4 +157,26 @@ public class StudentServiceTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void checkGetAllStudentSorted() {
+        Student student = new Student(14L, "Афанасий", 20);
+        when(studentRepository.findAll()).thenReturn(List.of(student));
+        List<Student> expected = List.of(student);
+
+        List<Student> actual = studentService.getStudentsNameStartingWithA();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void checkAvgAgeAllStudentsStream() {
+        Float age = (float)harry.getAge();
+        when(studentRepository.findAll()).thenReturn(List.of(harry));
+        when(studentRepository.getAverageAge()).thenReturn(age);
+        Double expected = (double) age;
+
+        Double actual = studentService.getAvgAgeAllStudentsStream();
+
+        assertEquals(expected, actual);
+    }
 }
