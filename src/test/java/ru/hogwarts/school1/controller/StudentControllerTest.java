@@ -164,6 +164,24 @@ public class StudentControllerTest {
 
         verify(studentRepository, times(1)).findAll();
     }
+    @Test
+    void testGetNameAllStudents() throws Exception{
+        Student student = new Student(2L,"Рон",20);
+        when(studentRepository.findAll()).thenReturn(List.of(harry,student));
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/name"))
+                .andExpect(status().isOk());
+
+    }
+    @Test
+    void testGetNameAllStudentsSynchronized() throws Exception{
+        Student student = new Student(2L,"Рон",20);
+        when(studentRepository.findAll()).thenReturn(List.of(harry,student));
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/name-synchronized"))
+                .andExpect(status().isOk());
+
+    }
 
     @Test
     void testCreateStudent() throws Exception {

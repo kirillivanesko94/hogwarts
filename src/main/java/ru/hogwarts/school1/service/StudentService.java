@@ -7,10 +7,7 @@ import ru.hogwarts.school1.model.Faculty;
 import ru.hogwarts.school1.model.Student;
 import ru.hogwarts.school1.repositories.StudentRepository;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -92,5 +89,82 @@ public class StudentService {
                 .stream()
                 .mapToInt(Student::getAge).average().orElse(0.0);
     }
+
+    public void getNameAllStudents() {
+//        List<String> listOfName = getAllStudent()
+//                .stream()
+//                .map(Student::getName)
+//                .collect(Collectors.toList());
+//        listOfName.stream()
+//                .limit(2)
+//                .forEach(System.out::println);
+//        new Thread(() -> listOfName.stream()
+//                .skip(2)
+//                .limit(2)
+//                .forEach(System.out::println));
+//        new Thread(() -> listOfName.stream()
+//                .skip(4)
+//                .limit(2)
+//                .forEach(System.out::println));
+
+        List<Student> students;
+        students = studentRepository.findAll();
+
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(3_000);
+                System.out.println(students.get(2).getName());
+                System.out.println(students.get(3).getName());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(3_000);
+                System.out.println(students.get(4).getName());
+                System.out.println(students.get(5).getName());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+    }
+
+    public void getNameAllStudentsSync() {
+        List<Student> students = studentRepository.findAll();
+        printNameSync(students, 0);
+        printNameSync(students, 1);
+        new Thread(() -> {
+            try {
+                Thread.sleep(3_000);
+                printNameSync(students, 2);
+                printNameSync(students, 3);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(3_000);
+                printNameSync(students, 4);
+                printNameSync(students, 5);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+
+    }
+
+    public void printNameSync(List<Student> students, int index) {
+        synchronized (this) {
+            System.out.println(students.get(index).getName());
+        }
+    }
 }
+
 
